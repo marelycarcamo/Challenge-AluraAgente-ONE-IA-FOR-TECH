@@ -76,14 +76,14 @@ def load_pdf(file_path: Path) -> Document:
 
         return Document(
             title=file_path.stem,
+            source=str(file_path),
+            file_type=file_path.suffix.lower().replace(".", ""),
             content=text,
             metadata={
                 "pages": len(reader.pages),
-                "source": str(file_path),
-                "extension": file_path.suffix.lower().replace(".", "")
             }
         )
-        
+            
 
     except Exception as e:
         raise ValueError(f"Error loading PDF '{file_path}': {e}")
