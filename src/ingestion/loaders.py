@@ -76,11 +76,11 @@ def load_pdf(file_path: Path) -> Document:
 
         return Document(
             title=file_path.stem,
-            source=str(file_path),
-            extension=file_path.suffix.lower().replace(".", ""),
             content=text,
             metadata={
                 "pages": len(reader.pages),
+                "source": str(file_path),
+                "extension": file_path.suffix.lower().replace(".", "")
             }
         )
         
@@ -112,7 +112,7 @@ def load_docx(file_path: Path) -> Document:
             extension=file_path.suffix.lower().replace(".", ""),
             content=text,
             metadata={
-                "pages": len(doc.paragraphs),
+                "paragraphs": len(doc.paragraphs),
             }
         )
 
@@ -141,7 +141,9 @@ def load_html(file_path: Path) -> Document:
             extension=file_path.suffix.lower().replace(".", ""),
             content=text,
             metadata={
-                "pages": 1
+                "title": soup.title.string if soup.title else None,
+                "h1": len(soup.find_all("h1")),
+                "h2": len(soup.find_all("h2"))               
             }
         )
 
