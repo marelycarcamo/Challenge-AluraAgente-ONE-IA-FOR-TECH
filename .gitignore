@@ -111,9 +111,6 @@ $RECYCLE.BIN/
 *.iws
 .idea_modules/
 
-# Jupyter Notebook
-.ipynb_checkpoints/
-*.ipynb
 
 # Sublime Text
 *.sublime-*
