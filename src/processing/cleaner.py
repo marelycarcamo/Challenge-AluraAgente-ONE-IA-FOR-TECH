@@ -50,6 +50,8 @@ def clean_document(document: Document) -> Document:
     text = text.strip()
 
     return Document(
+
+        id=document.id,
         title=document.title,
         source=document.source,
         file_type=document.file_type,
