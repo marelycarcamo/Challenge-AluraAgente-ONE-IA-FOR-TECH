@@ -41,8 +41,8 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from docx import Document as DocxDocument
 from pypdf import PdfReader
-
 from src.models.document import Document
+from uuid import uuid4
 
 
 def load_pdf(file_path: Path) -> Document:
@@ -75,6 +75,7 @@ def load_pdf(file_path: Path) -> Document:
                 text += page_text + "\n"
 
         return Document(
+            id=str(uuid4()),
             title=file_path.stem,
             source=str(file_path),
             file_type=file_path.suffix.lower().replace(".", ""),
@@ -107,9 +108,10 @@ def load_docx(file_path: Path) -> Document:
         )
 
         return Document(
+            id=str(uuid4()),
             title=file_path.stem,
             source=str(file_path),
-            extension=file_path.suffix.lower().replace(".", ""),
+            file_type=file_path.suffix.lower().replace(".", ""),
             content=text,
             metadata={
                 "paragraphs": len(doc.paragraphs),
@@ -136,9 +138,10 @@ def load_html(file_path: Path) -> Document:
         text = soup.get_text(separator="\n", strip=True)
 
         return Document(
+            id=str(uuid4()),
             title=file_path.stem,
             source=str(file_path),
-            extension=file_path.suffix.lower().replace(".", ""),
+            file_type=file_path.suffix.lower().replace(".", ""),
             content=text,
             metadata={
                 "title": soup.title.string if soup.title else None,
