@@ -41,7 +41,6 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from docx import Document as DocxDocument
 from pypdf import PdfReader
-
 from src.models.document import Document
 from uuid import uuid4
 
