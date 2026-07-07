@@ -186,7 +186,7 @@ logs/
 # Archivos personales del desarrollador
 personal_notes.md
 todo.txt
-test_*.py
+# test_*.py
 scratch_*.py
 debug_*.py
 
