@@ -25,7 +25,7 @@ from uuid import uuid4
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from src.models.document import Document
-from src.models.chunk import Chunk
+from src.models.chunk import Chunk, chunks
 
 
 def create_chunks(
