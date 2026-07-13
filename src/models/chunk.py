@@ -21,3 +21,4 @@ class Chunk:
     content: str
     metadata: dict[str, Any] = field(default_factory=dict)
     embedding: list[float] | None = None
+
