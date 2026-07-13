@@ -79,3 +79,22 @@ def test_chunks_have_independent_metadata():
     chunk_1.metadata["page"] = 1
 
     assert "page" not in chunk_2.metadata
+
+
+
+def test_chunk_embedding_is_none_by_default():
+    """
+    Verifica que un Chunk recién creado no tenga embedding asociado.
+
+    El embedding se genera posteriormente durante la etapa de Embeddings,
+    por lo que inicialmente debe ser None.
+    """
+    
+    chunk = Chunk(
+        id="chunk-001",
+        document_id="doc-001",
+        chunk_index=0,
+        content="Contenido del fragmento.",
+    )
+
+    assert chunk.embedding is None
