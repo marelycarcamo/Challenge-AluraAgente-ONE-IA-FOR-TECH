@@ -45,7 +45,7 @@ def get_or_create_collection(
     """
 
     client = chromadb.PersistentClient(
-        path="data/vector_store"
+        path=str(vector_store_path)
     )
 
     collection = client.get_or_create_collection(
