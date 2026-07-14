@@ -26,27 +26,24 @@ from chromadb.api.models.Collection import Collection
 from sentence_transformers import SentenceTransformer
 
 from src.models.chunk import Chunk
+from pathlib import Path
 
 
 def get_or_create_collection(
     collection_name: str,
+    vector_store_path: Path,
 ) -> Collection:
     """
     Obtiene una colección existente de ChromaDB o la crea si aún no existe.
 
-    Esta función centraliza la inicialización del índice vectorial,
-    evitando que el resto del sistema conozca los detalles de
-    configuración de ChromaDB.
-
     Args:
-        collection_name: Nombre único que identificará la colección.
+        collection_name:
+            Nombre de la colección vectorial.
 
-    Returns:
-        Colección lista para almacenar y consultar embeddings.
+        vector_store_path:
+            Ruta donde ChromaDB almacenará la persistencia del índice.
     """
 
-    # El índice vectorial se almacena de forma persistente para evitar
-    # regenerar todos los embeddings cada vez que se inicia el sistema.
     client = chromadb.PersistentClient(
         path="data/vector_store"
     )
@@ -56,6 +53,7 @@ def get_or_create_collection(
     )
 
     return collection
+
 
 
 def index_chunks(
