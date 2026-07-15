@@ -26,35 +26,31 @@ from chromadb.api.models.Collection import Collection
 from sentence_transformers import SentenceTransformer
 
 from src.models.chunk import Chunk
+from pathlib import Path
 
 
 def get_or_create_collection(
     collection_name: str,
+    vector_store_path: Path,
 ) -> Collection:
     """
     Obtiene una colección existente de ChromaDB o la crea si aún no existe.
 
-    Esta función centraliza la inicialización del índice vectorial,
-    evitando que el resto del sistema conozca los detalles de
-    configuración de ChromaDB.
-
     Args:
-        collection_name: Nombre único que identificará la colección.
+        collection_name:
+            Nombre de la colección vectorial.
 
-    Returns:
-        Colección lista para almacenar y consultar embeddings.
+        vector_store_path:
+            Ruta donde ChromaDB almacenará la persistencia del índice.
     """
 
-    # El índice vectorial se almacena de forma persistente para evitar
-    # regenerar todos los embeddings cada vez que se inicia el sistema.
     client = chromadb.PersistentClient(
-        path="data/vector_store"
+        path=str(vector_store_path)
     )
 
     collection = client.get_or_create_collection(
         name=collection_name
     )
-
     return collection
 
 
@@ -65,23 +61,22 @@ def index_chunks(
     """
     Almacena una colección de Chunk dentro del índice vectorial.
 
-    Cada Chunk aporta su identificador, contenido, embedding y metadata,
-    preservando la trazabilidad entre el documento original y el índice
-    utilizado durante la recuperación de información.
-
-    Args:
-        chunks: Lista de fragmentos previamente vectorizados.
-        collection: Colección donde serán almacenados los embeddings.
+    Si los chunks ya existen, se eliminan antes de volver a indexarlos
+    para evitar duplicados al ejecutar nuevamente el pipeline.
     """
 
-    # Se almacenan también los metadatos para mantener la trazabilidad
-    # entre los resultados recuperados y el documento original.
+    ids = [chunk.id for chunk in chunks]
+
+    # Evita duplicar registros si el notebook se ejecuta varias veces.
+    collection.delete(ids=ids)
+
     collection.add(
-        ids=[chunk.id for chunk in chunks],
+        ids=ids,
         embeddings=[chunk.embedding.tolist() for chunk in chunks],
         documents=[chunk.content for chunk in chunks],
         metadatas=[chunk.metadata for chunk in chunks],
     )
+
 
 
 def search_chunks(
