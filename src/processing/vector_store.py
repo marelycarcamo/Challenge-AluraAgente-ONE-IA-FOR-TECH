@@ -51,9 +51,7 @@ def get_or_create_collection(
     collection = client.get_or_create_collection(
         name=collection_name
     )
-
     return collection
-
 
 
 def index_chunks(
@@ -63,23 +61,22 @@ def index_chunks(
     """
     Almacena una colección de Chunk dentro del índice vectorial.
 
-    Cada Chunk aporta su identificador, contenido, embedding y metadata,
-    preservando la trazabilidad entre el documento original y el índice
-    utilizado durante la recuperación de información.
-
-    Args:
-        chunks: Lista de fragmentos previamente vectorizados.
-        collection: Colección donde serán almacenados los embeddings.
+    Si los chunks ya existen, se eliminan antes de volver a indexarlos
+    para evitar duplicados al ejecutar nuevamente el pipeline.
     """
 
-    # Se almacenan también los metadatos para mantener la trazabilidad
-    # entre los resultados recuperados y el documento original.
+    ids = [chunk.id for chunk in chunks]
+
+    # Evita duplicar registros si el notebook se ejecuta varias veces.
+    collection.delete(ids=ids)
+
     collection.add(
-        ids=[chunk.id for chunk in chunks],
+        ids=ids,
         embeddings=[chunk.embedding.tolist() for chunk in chunks],
         documents=[chunk.content for chunk in chunks],
         metadatas=[chunk.metadata for chunk in chunks],
     )
+
 
 
 def search_chunks(
