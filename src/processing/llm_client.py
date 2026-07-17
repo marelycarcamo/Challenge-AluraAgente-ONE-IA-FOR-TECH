@@ -18,12 +18,12 @@ Proyecto: ALESSIA
 
 import requests
 
-from src.config import settings
+#from src.config import settings
 
-settings.DEFAULT_PROVIDER
-settings.OPENROUTER_API_KEY
-settings.OPENROUTER_MODEL
-settings.LLM_TEMPERATURE
+# settings.DEFAULT_PROVIDER
+# settings.OPENROUTER_API_KEY
+# settings.OPENROUTER_MODEL
+# settings.LLM_TEMPERATURE
 
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
