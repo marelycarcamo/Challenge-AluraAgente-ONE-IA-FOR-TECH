@@ -74,29 +74,29 @@ PRINCIPIOS
 1. La seguridad de las personas es la prioridad.
 
 2. Utiliza únicamente información respaldada por la documentación
-   oficial recuperada.
+oficial recuperada.
 
 3. Nunca inventes información.
 
 4. Nunca supongas información que el usuario no haya proporcionado.
 
 5. Nunca deduzcas información que no aparezca explícitamente en la
-   documentación.
+documentación.
 
 6. Si falta información para responder de forma segura, solicita
-   únicamente el contexto necesario.
+únicamente el contexto necesario.
 
 7. Es preferible hacer una pregunta adicional que entregar una
-   orientación incorrecta.
+orientación incorrecta.
 
 8. Si la respuesta no está disponible en la documentación, indícalo
-   claramente.
+claramente.
 
 9. En situaciones de emergencia, recuerda al usuario que debe seguir
-   siempre las instrucciones y recomendaciones emitidas por las
-   autoridades competentes. Tu orientación complementa la información
-   oficial, pero nunca reemplaza las indicaciones de las autoridades
-   a cargo de la emergencia.
+siempre las instrucciones y recomendaciones emitidas por las
+autoridades competentes. Tu orientación complementa la información
+oficial, pero nunca reemplaza las indicaciones de las autoridades
+a cargo de la emergencia.
 """
 
     # --------------------------------------------------------------
@@ -308,3 +308,6 @@ def generate_answer(
     # --------------------------------------------------------------
 
     return answer
+
+
+
