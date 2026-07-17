@@ -14,9 +14,8 @@ vector numérico que preserva su significado semántico. Estos vectores
 serán utilizados posteriormente para construir el índice vectorial
 del sistema RAG.
 
-Proyecto:
-SOPHIA - Sistema de Orientación para Procedimientos con enfoque
-Humano e Inteligencia Artificial.
+Proyecto: ALESSIA
+
 """
 
 from sentence_transformers import SentenceTransformer
