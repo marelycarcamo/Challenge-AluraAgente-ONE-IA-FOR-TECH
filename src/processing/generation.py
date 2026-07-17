@@ -17,8 +17,11 @@ Proyecto:
 Alessia - Asistente Local para la gestión del riesgo de desastres.
 """
 
-from models.chunk import Chunk
-from processing.llm_client import LLMClient
+from src.models.chunk import Chunk
+from src.processing.llm_client import LLMClient
+
+
+
 
 
 def build_prompt(question: str, context: list[Chunk]) -> str:
