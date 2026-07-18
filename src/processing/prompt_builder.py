@@ -1,5 +1,6 @@
-from src.models import Chunk, LLMClient
-from src.processing.prompt_builder import build_prompt
+from src.models.chunk import Chunk
+
+
 
 def build_prompt(question: str, context: list[Chunk]) -> str:
     """

@@ -16,15 +16,26 @@ pipeline RAG.
 Proyecto: ALESSIA
 """
 
+# ------------------------------------------------------------------
+# Versión 1.0
+#
+# Actualmente ALESSIA utiliza únicamente OpenRouter.
+#
+# En una versión futura este módulo implementará failover automático
+# entre múltiples proveedores (OpenRouter, Hugging Face, Ollama, etc.)
+# cuando se produzcan errores recuperables como Rate Limit (429).
+# ------------------------------------------------------------------
+
+
+
+
 import requests
-
-#from src.config import settings
-
-# settings.DEFAULT_PROVIDER
-# settings.OPENROUTER_API_KEY
-# settings.OPENROUTER_MODEL
-# settings.LLM_TEMPERATURE
-
+from src.settings import (
+    DEFAULT_PROVIDER,
+    OPENROUTER_API_KEY,
+    OPENROUTER_MODEL,
+    LLM_TEMPERATURE
+)
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
@@ -48,13 +59,6 @@ def generate_response(prompt: str) -> str:
 
         case "openrouter":
             return _generate_openrouter(prompt)
-
-        case "gemini":
-            return _generate_gemini(prompt)
-
-        case "ollama":
-            return _generate_ollama(prompt)
-
         case _:
             raise ValueError(
                 f"Proveedor de LLM no soportado: {DEFAULT_PROVIDER}"
@@ -107,19 +111,19 @@ def _generate_openrouter(prompt: str) -> str:
         ) from error
 
 
-def _generate_gemini(prompt: str) -> str:
+def _generate_openrouter(prompt: str) -> str:
     """
-    Implementación pendiente para Gemini.
+    Implementación pendiente para openrouter.
     """
     raise NotImplementedError(
-        "Proveedor Gemini aún no implementado."
+        "Proveedor openrouter aún no implementado."
     )
 
 
-def _generate_ollama(prompt: str) -> str:
+def _generate_huggerface(prompt: str) -> str:
     """
-    Implementación pendiente para Ollama.
+    Implementación pendiente para huggerface.
     """
     raise NotImplementedError(
-        "Proveedor Ollama aún no implementado."
+        "Proveedor huggerface aún no implementado."
     )
