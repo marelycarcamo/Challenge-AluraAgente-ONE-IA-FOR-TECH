@@ -24,22 +24,24 @@ Proyecto:
     en la comuna de Valdivia.
 """
 
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from pathlib import Path
 
 from chromadb.api.models.Collection import Collection
+from sentence_transformers import CrossEncoder, SentenceTransformer
+
+from src.processing.generation import generate_answer
+from src.processing.reranker import rerank_chunks
+from src.processing.retriever import retrieve_context
+from src.processing.vector_store import get_or_create_collection
 
 
 class AgentService:
     """
     Fachada del pipeline RAG.
 
-    Esta clase coordina la ejecución del pipeline RAG,
-    encapsulando los procesos de recuperación del contexto,
-    reranking y generación de respuestas.
-
-    La capa de presentación debe interactuar únicamente con
-    esta clase, sin acceder directamente a los módulos internos
-    del pipeline.
+    Esta clase coordina la ejecución del pipeline completo,
+    desacoplando la interfaz de usuario de los módulos internos
+    del sistema.
     """
 
     def __init__(
@@ -49,8 +51,7 @@ class AgentService:
         reranker_model: CrossEncoder,
     ) -> None:
         """
-        Inicializa el servicio con los componentes necesarios
-        para ejecutar el pipeline RAG.
+        Inicializa el servicio con los componentes del pipeline.
 
         Parameters
         ----------
@@ -58,22 +59,60 @@ class AgentService:
             Colección persistente de ChromaDB.
 
         embedding_model : SentenceTransformer
-            Modelo utilizado para generar embeddings de las consultas.
+            Modelo utilizado para generar embeddings.
 
         reranker_model : CrossEncoder
-            Modelo utilizado para reordenar los fragmentos recuperados.
+            Modelo utilizado para realizar reranking.
         """
 
         self.collection = collection
         self.embedding_model = embedding_model
         self.reranker_model = reranker_model
 
+    @classmethod
+    def create(cls) -> "AgentService":
+        """
+        Crea una instancia completamente configurada de AgentService.
+
+        Returns
+        -------
+        AgentService
+            Servicio inicializado.
+        """
+
+        project_root = Path(__file__).parent.parent.parent
+
+        vector_store_path = (
+            project_root
+            / "data"
+            / "vector_store"
+        )
+
+        collection = get_or_create_collection(
+            collection_name="alessia_collection",
+            vector_store_path=vector_store_path,
+        )
+
+        embedding_model = SentenceTransformer(
+            "sentence-transformers/all-MiniLM-L6-v2"
+        )
+
+        reranker_model = CrossEncoder(
+            "cross-encoder/ms-marco-MiniLM-L-6-v2"
+        )
+
+        return cls(
+            collection=collection,
+            embedding_model=embedding_model,
+            reranker_model=reranker_model,
+        )
+
     def ask(
         self,
         question: str,
     ) -> str:
         """
-        Procesa una consulta utilizando el pipeline RAG.
+        Ejecuta el pipeline RAG completo.
 
         Parameters
         ----------
@@ -85,29 +124,60 @@ class AgentService:
         str
             Respuesta generada por el modelo de lenguaje.
         """
+
         chunks = self._retrieve_context(question)
-        ranked_chunks = self._rerank_chunks(question, chunks)
-        return self._generate_answer(question, ranked_chunks)
 
-    def _retrieve_context(self, question: str):
-        """Recupera los fragmentos más relevantes."""
-
-        query_embedding = self.embedding_model.encode(question).tolist()
-        results = self.collection.query(
-            query_embeddings=[query_embedding],
-            n_results=5,
+        ranked_chunks = self._rerank_chunks(
+            question,
+            chunks,
         )
-        return results.get("documents", [[]])[0]
 
-    def _rerank_chunks(self, question: str, chunks):
-        """Reordena los fragmentos recuperados según su relevancia."""
+        return self._generate_answer(
+            question,
+            ranked_chunks,
+        )
 
-        pairs = [(question, chunk) for chunk in chunks]
-        scores = self.reranker_model.predict(pairs)
-        ranked = sorted(zip(chunks, scores), key=lambda x: x[1], reverse=True)
-        return [chunk for chunk, _ in ranked]
+    def _retrieve_context(
+        self,
+        question: str,
+    ):
+        """
+        Recupera los fragmentos más relevantes para la consulta.
+        """
 
-    def _generate_answer(self, question: str, ranked_chunks):
-        """Genera una respuesta utilizando el contexto recuperado."""
+        return retrieve_context(
+            query=question,
+            collection=self.collection,
+            model=self.embedding_model,
+            k=5,
+        )
 
-        pass
+    def _rerank_chunks(
+        self,
+        question: str,
+        chunks,
+    ):
+        """
+        Reordena los fragmentos recuperados según su relevancia.
+        """
+
+        return rerank_chunks(
+            query=question,
+            chunks=chunks,
+            model=self.reranker_model,
+            top_k=3,
+        )
+
+    def _generate_answer(
+        self,
+        question: str,
+        chunks,
+    ) -> str:
+        """
+        Genera una respuesta utilizando el contexto recuperado.
+        """
+
+        return generate_answer(
+            question=question,
+            context=chunks,
+        )
