@@ -1,45 +1,117 @@
-from unittest.mock import MagicMock
+"""
+Archivo:
+    test_reranker.py
 
+Módulo:
+    Tests unitarios - Reranking
+
+Objetivo:
+    Validar el comportamiento del módulo reranker.py,
+    verificando que los fragmentos documentales sean ordenados
+    correctamente según su relevancia calculada por el modelo
+    CrossEncoder.
+
+Descripción:
+    Estos tests validan que:
+
+    - el módulo reciba objetos Chunk;
+    - los puntajes de relevancia sean asociados a cada fragmento;
+    - los resultados sean ordenados de mayor a menor relevancia;
+    - la cantidad de resultados retornados respete el parámetro top_k.
+
+    El modelo CrossEncoder es simulado para evitar dependencia de
+    modelos externos durante las pruebas unitarias.
+
+Proyecto:
+    ALESSIA - Asistente de gestión del riesgo de desastres
+    para la comuna de Valdivia.
+"""
+
+
+from unittest.mock import Mock
+
+from src.models.chunk import Chunk
 from src.processing.reranker import rerank_chunks
 
 
-def test_rerank_chunks_orders_results_by_score():
-    """Verifica que los fragmentos se ordenen por relevancia."""
+def test_rerank_chunks_orders_chunks_by_score():
+    """
+    Verifica que rerank_chunks ordene los fragmentos
+    desde mayor a menor relevancia.
+    """
 
-    retrieval_results = {
-        "documents": [[
-            "Documento A",
-            "Documento B",
-            "Documento C",
-        ]],
-        "metadatas": [[
-            {"page": 1},
-            {"page": 2},
-            {"page": 3},
-        ]],
-    }
+    chunks = [
+        Chunk(
+            id="chunk-1",
+            document_id="doc-1",
+            chunk_index=0,
+            content="Fragmento poco relevante.",
+            metadata={},
+        ),
+        Chunk(
+            id="chunk-2",
+            document_id="doc-1",
+            chunk_index=1,
+            content="Fragmento muy relevante.",
+            metadata={},
+        ),
+    ]
 
-    model = MagicMock()
+    mock_model = Mock()
 
-    model.predict.return_value = [
+    mock_model.predict.return_value = [
         0.20,
-        0.95,
-        0.60,
+        0.90,
     ]
 
     results = rerank_chunks(
-        query="consulta",
-        retrieval_results=retrieval_results,
-        model=model,
+        query="¿Qué hacer ante una inundación?",
+        chunks=chunks,
+        model=mock_model,
         top_k=2,
     )
 
-    model.predict.assert_called_once()
+    assert results[0].id == "chunk-2"
+    assert results[1].id == "chunk-1"
 
-    assert len(results) == 2
+    assert results[0].metadata["rerank_score"] == 0.90
+    assert results[1].metadata["rerank_score"] == 0.20
 
-    assert results[0]["document"] == "Documento B"
-    assert results[0]["score"] == 0.95
 
-    assert results[1]["document"] == "Documento C"
-    assert results[1]["score"] == 0.60
+def test_rerank_chunks_returns_top_k_results():
+    """
+    Verifica que rerank_chunks respete la cantidad máxima
+    de resultados solicitados.
+    """
+
+    chunks = [
+        Chunk(
+            id=f"chunk-{index}",
+            document_id="doc-1",
+            chunk_index=index,
+            content=f"Contenido {index}",
+            metadata={},
+        )
+        for index in range(5)
+    ]
+
+    mock_model = Mock()
+
+    mock_model.predict.return_value = [
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+    ]
+
+    results = rerank_chunks(
+        query="Consulta de prueba",
+        chunks=chunks,
+        model=mock_model,
+        top_k=3,
+    )
+
+    assert len(results) == 3
+
+    assert results[0].metadata["rerank_score"] == 0.5

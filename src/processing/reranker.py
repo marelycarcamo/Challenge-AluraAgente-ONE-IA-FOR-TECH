@@ -1,90 +1,94 @@
 """
-Archivo: reranker.py
+Archivo:
+    reranker.py
 
 Módulo:
-Procesamiento (Processing)
+    Processing - Reranking
 
 Objetivo:
-Reordenar los fragmentos recuperados durante la etapa de Retrieval
-según su relevancia para la consulta del usuario.
+    Reordenar los fragmentos recuperados durante la etapa de Retrieval
+    utilizando un modelo CrossEncoder para estimar la relevancia entre
+    la consulta del usuario y cada fragmento documental.
 
 Descripción:
-Este módulo aplica un modelo CrossEncoder para recalcular la
-relevancia de los fragmentos recuperados mediante búsqueda
-semántica. El objetivo es priorizar aquellos chunks que aportan
-el contexto más útil para la generación de respuestas dentro del
-pipeline RAG.
+    Este módulo recibe objetos Chunk provenientes del Retriever y calcula
+    un puntaje de relevancia utilizando un modelo CrossEncoder.
 
-Proyecto: ALESSIA
+    La función retorna los mismos objetos Chunk ordenados desde el más
+    relevante al menos relevante.
 
+    La interacción con ChromaDB queda completamente encapsulada en capas
+    anteriores del pipeline.
+
+Proyecto:
+    ALESSIA - Asistente de gestión del riesgo de desastres
+    para la comuna de Valdivia.
 """
 
 from sentence_transformers import CrossEncoder
 
+from src.models.chunk import Chunk
+
 
 def rerank_chunks(
     query: str,
-    retrieval_results: dict,
+    chunks: list[Chunk],
     model: CrossEncoder,
     top_k: int = 3,
-) -> list[dict]:
+) -> list[Chunk]:
     """
-    Reordena los fragmentos recuperados durante la etapa de Retrieval
-    según su relevancia para la consulta del usuario.
+    Ordena fragmentos documentales según su relevancia para una consulta.
 
-    Para cada fragmento recuperado se calcula un nuevo puntaje de
-    relevancia utilizando un modelo CrossEncoder. Posteriormente,
-    los resultados se ordenan de mayor a menor puntaje y se
-    devuelven únicamente los fragmentos mejor posicionados.
+    Para cada fragmento se calcula un puntaje utilizando un modelo
+    CrossEncoder. Posteriormente los fragmentos son ordenados de mayor
+    a menor relevancia y se retorna únicamente la cantidad solicitada.
 
     Args:
         query:
             Consulta realizada por el usuario.
 
-        retrieval_results:
-            Resultados obtenidos desde ChromaDB.
+        chunks:
+            Lista de objetos Chunk recuperados durante Retrieval.
 
         model:
-            Modelo CrossEncoder utilizado para calcular la
-            relevancia entre la consulta y cada fragmento.
+            Modelo CrossEncoder utilizado para calcular relevancia.
 
         top_k:
             Cantidad máxima de fragmentos a retornar.
 
     Returns:
-        Lista de diccionarios con los fragmentos reordenados.
+        Lista de objetos Chunk ordenados por relevancia.
     """
 
-    documents = retrieval_results["documents"][0]
-    metadatas = retrieval_results["metadatas"][0]
+    if not chunks:
+        return []
 
-    # Construir los pares (consulta, documento)
+    # Construye pares consulta-documento para el modelo CrossEncoder.
     sentence_pairs = [
-        (query, document)
-        for document in documents
-    ]
-
-    # Calcular el puntaje de relevancia
-    scores = model.predict(sentence_pairs)
-
-    # Asociar documento, metadata y score
-    reranked_results = [
-        {
-            "document": document,
-            "metadata": metadata,
-            "score": float(score),
-        }
-        for document, metadata, score in zip(
-            documents,
-            metadatas,
-            scores,
+        (
+            query,
+            chunk.content,
         )
+        for chunk in chunks
     ]
 
-    # Ordenar de mayor a menor relevancia
-    reranked_results.sort(
-        key=lambda result: result["score"],
+    # Calcula puntajes de relevancia.
+    scores = model.predict(
+        sentence_pairs
+    )
+
+    # Guarda el score dentro de metadata para mantener trazabilidad.
+    for chunk, score in zip(
+        chunks,
+        scores,
+    ):
+        chunk.metadata["rerank_score"] = float(score)
+
+    # Ordena los fragmentos desde mayor a menor relevancia.
+    ranked_chunks = sorted(
+        chunks,
+        key=lambda chunk: chunk.metadata["rerank_score"],
         reverse=True,
     )
 
-    return reranked_results[:top_k]
+    return ranked_chunks[:top_k]
