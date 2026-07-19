@@ -38,13 +38,14 @@ load_dotenv(project_root / ".env")
 # Configuración del proveedor LLM
 # --------------------------------------------------------------
 
+DEFAULT_PROVIDER = "openrouter"
+
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 OPENROUTER_MODEL = os.getenv(
     "OPENROUTER_MODEL",
-    "liquid/lfm-2.5-1.2b-instruct:free",
+    "openrouter/auto",
 )
-DEFAULT_PROVIDER = OPENROUTER_API_KEY
 
 LLM_TEMPERATURE = float(
     os.getenv("LLM_TEMPERATURE", "0.2")

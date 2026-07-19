@@ -1,22 +1,22 @@
 from unittest.mock import patch
 
-from src.models.chunk import Chunk
 from src.processing.generation import generate_answer
 
 
 def test_generate_answer_builds_prompt_and_returns_response():
     """
-    Verifica que generate_answer construya el prompt
-    y retorne la respuesta generada por el LLM.
+    Verifica que generate_answer transforme el contexto recibido
+    desde el reranker, construya el prompt y retorne la respuesta
+    generada por el LLM.
     """
 
-    chunk = Chunk(
-        id="chunk-1",
-        document_id="doc-1",
-        chunk_index=0,
-        content="Contenido de prueba.",
-        metadata={},
-    )
+    context = [
+        {
+            "document": "Contenido de prueba.",
+            "metadata": {},
+            "score": 0.95,
+        }
+    ]
 
     with patch(
         "src.processing.generation.build_prompt",
@@ -28,12 +28,14 @@ def test_generate_answer_builds_prompt_and_returns_response():
 
         answer = generate_answer(
             question="¿Qué hacer ante una inundación?",
-            context=[chunk],
+            context=context,
         )
 
         mock_build_prompt.assert_called_once_with(
             question="¿Qué hacer ante una inundación?",
-            context=[chunk],
+            context=[
+                "Contenido de prueba.",
+            ],
         )
 
         mock_generate_response.assert_called_once_with(
