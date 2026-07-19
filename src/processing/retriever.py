@@ -16,15 +16,23 @@ relevantes a partir de una búsqueda por similitud, proporcionando el
 contexto que será utilizado posteriormente durante la generación de
 respuestas del sistema RAG.
 
-Proyecto:
-SOPHIA - Sistema de Orientación para Procedimientos con enfoque
-Humano e Inteligencia Artificial.
+Proyecto: ALESSIA
+
 """
 
+
+"""
+Módulo encargado de transformar los resultados obtenidos desde ChromaDB
+en objetos del dominio utilizados por ALESSIA.
+
+La capa Retriever evita que el resto del pipeline dependa directamente
+de la estructura interna del vector store.
+"""
 
 from chromadb.api.models.Collection import Collection
 from sentence_transformers import SentenceTransformer
 
+from src.models.chunk import Chunk
 from src.processing.vector_store import search_chunks
 
 
@@ -33,27 +41,30 @@ def retrieve_context(
     collection: Collection,
     model: SentenceTransformer,
     k: int = 5,
-) -> list[str]:
+) -> list[Chunk]:
     """
-    Recupera los fragmentos de texto más relevantes para una consulta.
+    Recupera los fragmentos más relevantes para una consulta.
 
-    Esta función delega la búsqueda semántica al módulo ``vector_store``
-    y extrae únicamente el contenido textual de los resultados. De esta
-    forma, el resto del sistema no necesita conocer la estructura interna
-    de la respuesta entregada por ChromaDB.
+    Convierte la respuesta entregada por ChromaDB en objetos Chunk,
+    manteniendo una representación consistente dentro del pipeline RAG.
 
     Args:
-        query: Consulta realizada por el usuario.
-        collection: Colección donde se realizará la búsqueda semántica.
-        model: Modelo utilizado para generar el embedding de la consulta.
-        k: Cantidad máxima de fragmentos a recuperar.
+        query:
+            Consulta realizada por el usuario.
+
+        collection:
+            Colección vectorial donde se realiza la búsqueda.
+
+        model:
+            Modelo utilizado para generar embeddings.
+
+        k:
+            Cantidad máxima de fragmentos recuperados.
 
     Returns:
-        Lista con los fragmentos de texto más relevantes.
+        Lista de objetos Chunk recuperados.
     """
 
-    # La búsqueda semántica se delega al módulo vector_store para mantener
-    # encapsulada toda la interacción con ChromaDB.
     results = search_chunks(
         query=query,
         collection=collection,
@@ -61,9 +72,31 @@ def retrieve_context(
         k=k,
     )
 
-    # ChromaDB devuelve una lista de documentos por cada consulta realizada.
-    # Como SOPHIA procesa una única consulta, se extrae el primer elemento.
-    context_fragments = results["documents"][0]
+    documents = results["documents"][0]
+    metadatas = results["metadatas"][0]
+    ids = results["ids"][0]
 
-    return context_fragments
+    chunks = []
 
+    for chunk_id, document, metadata in zip(
+        ids,
+        documents,
+        metadatas,
+    ):
+        chunk = Chunk(
+            id=chunk_id,
+            document_id=metadata.get(
+                "document_id",
+                "",
+            ),
+            chunk_index=metadata.get(
+                "chunk_index",
+                0,
+            ),
+            content=document,
+            metadata=metadata,
+        )
+
+        chunks.append(chunk)
+
+    return chunks

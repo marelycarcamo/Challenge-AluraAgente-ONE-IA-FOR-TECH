@@ -15,9 +15,7 @@ fragmento conserva un identificador único, la referencia al documento
 de origen y la metadata necesaria para las siguientes etapas del
 pipeline RAG.
 
-Proyecto:
-SOPHIA - Sistema de Orientación para Procedimientos con enfoque
-Humano e Inteligencia Artificial.
+Proyecto: ALESSIA
 """
 
 from uuid import uuid4

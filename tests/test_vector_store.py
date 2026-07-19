@@ -1,35 +1,33 @@
-import src.models.chunk
-from src.processing.vector_store import index_chunks, Collection
+from unittest.mock import MagicMock
 
-def index_chunks(
-    chunks: list[src.models.chunk.Chunk],
-    collection: Collection,
-    ) -> None:
-    """
-    Almacena una colección de Chunk dentro del índice vectorial.
+import numpy as np
 
-    Cada Chunk aporta su identificador, contenido, embedding y metadata,
-    preservando la trazabilidad entre el documento original y el índice
-    utilizado durante la recuperación de información.
+from src.models.chunk import Chunk
+from src.processing.vector_store import index_chunks
 
-    Args:
-        chunks: Lista de fragmentos previamente vectorizados.
-        collection: Colección donde serán almacenados los embeddings.
-    """
 
-    # Se almacenan también los metadatos para mantener la trazabilidad
-    # entre los resultados recuperados y el documento original.
-    collection.add(
-        ids=[chunk.id for chunk in chunks],
-        embeddings=[
-            chunk.embedding.tolist()
-            if hasattr(chunk.embedding, "tolist")
-            else chunk.embedding
-            for chunk in chunks
-        ],
-        documents=[chunk.content for chunk in chunks],
-        metadatas=[chunk.metadata for chunk in chunks],
+def test_index_chunks():
+    """Verifica que los chunks sean almacenados correctamente."""
+
+    chunk = Chunk(
+        id="chunk-1",
+        document_id="doc-1",
+        chunk_index=0,
+        content="Contenido de prueba.",
+        metadata={"page": 1},
+        embedding=np.array([0.1, 0.2, 0.3]),
     )
 
-    return None
+    collection = MagicMock()
 
+    index_chunks(
+        chunks=[chunk],
+        collection=collection,
+    )
+
+    collection.add.assert_called_once_with(
+        ids=["chunk-1"],
+        embeddings=[[0.1, 0.2, 0.3]],
+        documents=["Contenido de prueba."],
+        metadatas=[{"page": 1}],
+    )
