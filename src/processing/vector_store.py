@@ -1,32 +1,19 @@
 """
-Archivo: vector_store.py
+Módulo encargado de la persistencia y recuperación de embeddings
+utilizando ChromaDB como vector store.
 
-Módulo:
-Procesamiento (Processing)
-
-Objetivo:
-Construir y consultar el índice vectorial del sistema utilizando
-ChromaDB.
-
-Descripción:
-Este módulo centraliza todas las operaciones relacionadas con el
-almacenamiento y recuperación de embeddings. Su responsabilidad es
-crear la colección vectorial, indexar los Chunk generados durante
-el procesamiento y recuperar los fragmentos más relevantes mediante
-búsqueda por similitud.
-
-Proyecto:
-SOPHIA - Sistema de Orientación para Procedimientos con enfoque
-Humano e Inteligencia Artificial.
+ALESSIA 1.0 utiliza ChromaDB como capa de almacenamiento vectorial.
+La adaptación hacia objetos de dominio (Chunk) se realiza en capas
+superiores del pipeline.
 """
 
-import chromadb
+from pathlib import Path
 
+import chromadb
 from chromadb.api.models.Collection import Collection
 from sentence_transformers import SentenceTransformer
 
 from src.models.chunk import Chunk
-from pathlib import Path
 
 
 def get_or_create_collection(
@@ -34,14 +21,17 @@ def get_or_create_collection(
     vector_store_path: Path,
 ) -> Collection:
     """
-    Obtiene una colección existente de ChromaDB o la crea si aún no existe.
+    Obtiene una colección existente de ChromaDB o la crea si no existe.
 
     Args:
         collection_name:
-            Nombre de la colección vectorial.
+            Nombre identificador de la colección.
 
         vector_store_path:
-            Ruta donde ChromaDB almacenará la persistencia del índice.
+            Ruta donde ChromaDB mantiene la persistencia.
+
+    Returns:
+        Colección activa de ChromaDB.
     """
 
     client = chromadb.PersistentClient(
@@ -51,6 +41,7 @@ def get_or_create_collection(
     collection = client.get_or_create_collection(
         name=collection_name
     )
+
     return collection
 
 
@@ -59,24 +50,50 @@ def index_chunks(
     collection: Collection,
 ) -> None:
     """
-    Almacena una colección de Chunk dentro del índice vectorial.
+    Indexa fragmentos documentales dentro del vector store.
 
-    Si los chunks ya existen, se eliminan antes de volver a indexarlos
-    para evitar duplicados al ejecutar nuevamente el pipeline.
+    Cada Chunk se almacena junto con:
+    - contenido textual;
+    - embedding;
+    - información mínima de trazabilidad.
+
+    La estructura metadata utiliza diccionarios porque corresponde
+    al formato requerido por ChromaDB.
     """
 
-    ids = [chunk.id for chunk in chunks]
+    ids = [
+        chunk.id
+        for chunk in chunks
+    ]
 
-    # Evita duplicar registros si el notebook se ejecuta varias veces.
-    collection.delete(ids=ids)
+    # Evita duplicar información al ejecutar nuevamente la indexación.
+    collection.delete(
+        ids=ids
+    )
 
     collection.add(
         ids=ids,
-        embeddings=[chunk.embedding.tolist() for chunk in chunks],
-        documents=[chunk.content for chunk in chunks],
-        metadatas=[chunk.metadata for chunk in chunks],
-    )
 
+        embeddings=[
+            chunk.embedding.tolist()
+            for chunk in chunks
+        ],
+
+        documents=[
+            chunk.content
+            for chunk in chunks
+        ],
+
+        metadatas=[
+            {
+                "chunk_id": chunk.id,
+                "document_id": chunk.document_id,
+                "chunk_index": chunk.chunk_index,
+                **chunk.metadata,
+            }
+            for chunk in chunks
+        ],
+    )
 
 
 def search_chunks(
@@ -84,31 +101,42 @@ def search_chunks(
     collection: Collection,
     model: SentenceTransformer,
     k: int = 5,
-) -> dict:
+):
     """
-    Recupera los Chunk más similares a una consulta utilizando
-    búsqueda por similitud vectorial.
+    Recupera fragmentos relevantes mediante búsqueda semántica.
 
-    La consulta se transforma en un embedding mediante el modelo
-    recibido como parámetro y posteriormente se utiliza para buscar
-    los fragmentos más relevantes dentro de la colección.
+    La consulta es transformada en embedding y posteriormente
+    utilizada para buscar coincidencias dentro de ChromaDB.
 
     Args:
-        query: Consulta realizada por el usuario.
-        collection: Colección donde se realizará la búsqueda.
-        model: Modelo utilizado para generar el embedding de la consulta.
-        k: Cantidad máxima de resultados a recuperar.
+        query:
+            Pregunta realizada por el usuario.
+
+        collection:
+            Colección vectorial donde se realiza la búsqueda.
+
+        model:
+            Modelo utilizado para generar embeddings.
+
+        k:
+            Cantidad máxima de resultados.
 
     Returns:
-        Diccionario con los resultados entregados por ChromaDB.
+        Resultado nativo entregado por ChromaDB.
+
+    Note:
+        La conversión del resultado hacia objetos Chunk pertenece
+        a la capa Retriever.
     """
 
-    # El embedding de la consulta se genera aquí para encapsular toda la
-    # lógica de búsqueda dentro del vector store.
-    query_embedding = model.encode(query)
+    query_embedding = model.encode(
+        query
+    )
 
     results = collection.query(
-        query_embeddings=[query_embedding.tolist()],
+        query_embeddings=[
+            query_embedding.tolist()
+        ],
         n_results=k,
     )
 

@@ -16,6 +16,8 @@ This module DOES NOT:
 - Read documents.
 - Split text into chunks.
 - Generate embeddings.
+
+Proyecto: ALESSIA
 """
 
 import re

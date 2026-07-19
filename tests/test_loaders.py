@@ -8,7 +8,7 @@ Módulo probado:
 
 Objetivo:
     Validar la correcta carga de documentos PDF y su conversión
-    a objetos Document dentro del pipeline de SOPHIA.
+    a objetos Document dentro del pipeline de ALESSIA.
 
 Descripción:
     Estos tests aseguran que la función load_pdf():
@@ -19,7 +19,7 @@ Descripción:
     - Maneje correctamente errores cuando el archivo no existe.
 
 Contexto del proyecto:
-    SOPHIA - Sistema de orientación sobre gestión del riesgo de desastres
+    ALESSIA - Sistema de orientación sobre gestión del riesgo de desastres
     en la comuna de Valdivia.
 
 Notas:
