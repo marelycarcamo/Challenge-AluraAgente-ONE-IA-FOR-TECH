@@ -174,7 +174,6 @@ logs/
 # --------------------------
 *.sql
 *.sqlite
-*.sqlite3
 *.db
 *.mdb
 *.dump
