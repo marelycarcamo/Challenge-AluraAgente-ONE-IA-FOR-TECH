@@ -184,7 +184,6 @@ logs/
 # --------------------------
 # Archivos personales del desarrollador
 personal_notes.md
-todo.txt
 # test_*.py
 scratch_*.py
 debug_*.py
@@ -233,7 +232,6 @@ docs/source/generated/
 # Mantener estos archivos de configuración importantes:
 !.vscode/settings.json.example
 !.env.example
-!requirements.example.txt
 !docker-compose.example.yml
 
 # --------------------------
