@@ -26,19 +26,27 @@ Proyecto:
     en la comuna de Valdivia.
 """
 
+"""
+Componente encargado de renderizar la interfaz conversacional
+de ALESSIA.
+"""
+
 import streamlit as st
 
+from app.config import (
+    ALESSIA_AVATAR_PATH,
+    USER_AVATAR_PATH,
+)
 
-def render_chat(
-    agent_service,
-):
+
+def render_chat(agent_service):
     """
-    Renderiza la interfaz conversacional
-    y procesa consultas del usuario.
+    Renderiza la interfaz conversacional y procesa
+    las consultas del usuario.
 
     Parameters
     ----------
-    agent_service:
+    agent_service :
         Servicio encargado de ejecutar el pipeline RAG.
 
     Returns
@@ -47,22 +55,40 @@ def render_chat(
     """
 
     # Inicializar historial de conversación.
-    # Streamlit reinicia la ejecución del script en cada interacción,
-    # por lo que session_state permite mantener la memoria temporal.
     if "messages" not in st.session_state:
-        st.session_state.messages = []
-
+        st.session_state.messages = [
+            {
+                "role": "assistant",
+                "content": (
+                    "¡Hola, vecino! 👋\n\n"
+                    "Soy **ALESSIA**, tu asistente especializada en "
+                    "gestión del riesgo de desastres para la comuna de Valdivia.\n\n"
+                    "Puedo ayudarte a consultar información oficial sobre "
+                    "planes comunales, amenazas, emergencias, zonas de riesgo "
+                    "y medidas de preparación.\n\n"
+                    "¿En qué puedo ayudarte hoy?"
+                ),
+            }
+        ]
+        
     # Mostrar historial existente.
     for message in st.session_state.messages:
 
+        avatar = (
+            str(ALESSIA_AVATAR_PATH)
+            if message["role"] == "assistant"
+            else str(USER_AVATAR_PATH)
+        )
+
         with st.chat_message(
-            message["role"]
+            message["role"],
+            avatar=avatar,
         ):
             st.write(
                 message["content"]
             )
 
-    # Capturar nueva pregunta del usuario.
+    # Capturar nueva consulta.
     question = st.chat_input(
         "Escribe tu consulta..."
     )
@@ -78,13 +104,17 @@ def render_chat(
         )
 
         # Mostrar mensaje del usuario.
-        with st.chat_message("user"):
+        with st.chat_message(
+            "user",
+            avatar=str(USER_AVATAR_PATH),
+        ):
             st.write(question)
 
-        # Ejecutar consulta mediante la capa de aplicación.
-        answer = agent_service.ask(
-            question
-        )
+        # Ejecutar el pipeline RAG.
+        with st.spinner(
+            "ALESSIA está analizando la información oficial..."
+        ):
+            answer = agent_service.ask(question)
 
         # Guardar respuesta del asistente.
         st.session_state.messages.append(
@@ -94,6 +124,9 @@ def render_chat(
             }
         )
 
-        # Mostrar respuesta generada.
-        with st.chat_message("assistant"):
+        # Mostrar respuesta de ALESSIA.
+        with st.chat_message(
+            "assistant",
+            avatar=str(ALESSIA_AVATAR_PATH),
+        ):
             st.write(answer)

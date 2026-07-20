@@ -29,7 +29,7 @@ Responsable de:
 from pathlib import Path
 import sys
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
@@ -78,7 +78,7 @@ with st.sidebar:
             str(AVATAR_PATH),
             use_container_width=True,
         )   
-
+        st.markdown(APP_DESCRIPTION)
 # --------------------------------------------------
 # Inicializar servicio
 # --------------------------------------------------
