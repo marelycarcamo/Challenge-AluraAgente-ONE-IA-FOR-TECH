@@ -31,34 +31,47 @@ from pathlib import Path
 APP_NAME = "ALESSIA"
 
 APP_DESCRIPTION = (
-    "Asistente inteligente para la gestión "
-    "del riesgo de desastres en Valdivia."
+    "Asistente Local de Enlace, Soluciones "
+    "e Inteligencia Autónoma."
 )
-
-
-APP_ICON = "🌊"
 
 
 # Rutas de recursos visuales
 
-APP_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).parent
 
 
-ASSETS_DIR = (
-    APP_DIR
-    / "assets"
-)
+ASSETS_PATH = BASE_DIR / "assets"
 
 
 LOGO_PATH = (
-    ASSETS_DIR
+    ASSETS_PATH
     / "logo"
     / "alessia_logo.png"
 )
 
-
 AVATAR_PATH = (
-    ASSETS_DIR
+    ASSETS_PATH
     / "images"
-    / "alessia_avatar.png"
+    / "alessia_img_1.png"
 )
+
+ALESSIA_AVATAR_PATH = (
+    ASSETS_PATH
+    / "avatars"
+    / "alessia_avatar_2.png"
+)
+
+USER_AVATAR_PATH = (
+    ASSETS_PATH
+    / "avatars"
+    / "user_avatar_2.png"
+)
+
+APP_ICON = (
+    ASSETS_PATH
+    / "avatars"
+    / "alessia_avatar_2.png"
+)
+
+
