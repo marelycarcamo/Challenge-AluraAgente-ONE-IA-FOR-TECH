@@ -266,7 +266,4 @@ service-account.json
 *.cer
 *.pfx
 
-
-
-data/vector_store/
 notebooks/data/vector_store/
