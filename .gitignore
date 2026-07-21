@@ -231,7 +231,6 @@ docs/source/generated/
 # --------------------------
 # Mantener estos archivos de configuración importantes:
 !.vscode/settings.json.example
-!.env.example
 !docker-compose.example.yml
 
 # --------------------------
