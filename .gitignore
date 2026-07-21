@@ -59,14 +59,8 @@ staticfiles/
 # ARCHIVOS DE ENTORNO/CONFIG
 # --------------------------
 # NUNCA subir contraseñas/API keys
-*.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.*
-.envrc
-.env.*.local
+.env
+
 
 # --------------------------
 # SISTEMA OPERATIVO
@@ -233,7 +227,6 @@ docs/source/generated/
 # --------------------------
 # Mantener estos archivos de configuración importantes:
 !.vscode/settings.json.example
-!.env.example
 !requirements.example.txt
 !docker-compose.example.yml
 
