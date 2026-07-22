@@ -16,13 +16,21 @@
 	- [3. Qué aporta ALESSIA?](#3-qué-aporta-alessia)
 	- [4. ¿Cuál es el proyecto detrás de ALESSIA?](#4-cuál-es-el-proyecto-detrás-de-alessia)
 	- [5. Ciclo de interacción con ALESSIA](#5-ciclo-de-interacción-con-alessia)
+	- [](#)
 	- [6. ALESSIA en acción](#6-alessia-en-acción)
 	- [7. Arquitectura del sistema](#7-arquitectura-del-sistema)
+		- [Capas de Arquitectura](#capas-de-arquitectura)
 	- [8. Flujo del pipeline RAG](#8-flujo-del-pipeline-rag)
 	- [9. Estructura del proyecto](#9-estructura-del-proyecto)
 	- [10. Tecnologías utilizadas](#10-tecnologías-utilizadas)
 	- [11. Características implementadas (Versión 1.0)](#11-características-implementadas-versión-10)
+		- [Funcionalidades existentes](#funcionalidades-existentes)
 	- [12. Instalación y ejecución](#12-instalación-y-ejecución)
+		- [1. Clonar el repositorio](#1-clonar-el-repositorio)
+		- [2. Crear y activar el entorno virtual](#2-crear-y-activar-el-entorno-virtual)
+		- [3. Instalar dependencias](#3-instalar-dependencias)
+		- [4. Configurar la API KEY](#4-configurar-la-api-key)
+		- [5. Ejecutar ALESSIA](#5-ejecutar-alessia)
 	- [13. Roadmap](#13-roadmap)
 	- [14. Author \& Licence](#14-author--licence)
 
@@ -58,6 +66,15 @@ Ante una situación de necesidad, encontrar una respuesta específica puede requ
 ---
 
 ## 2. ¿Qué es ALESSIA?
+
+[Video de presentación de ALESSIA](https://youtu.be/UZ_mJdIBY8s)
+
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=UZ_mJdIBY8s" target="_blank">
+    <img src="https://img.youtube.com/vi/UZ_mJdIBY8s/0.jpg" alt="Ver video del proyecto" width="560" height="315">
+  </a>
+</p>
 
 **ALESSIA** (Asistente Local de Enlace, Soluciones e Inteligencia Autónoma) es un asistente basado en Inteligencia Artificial Generativa y arquitectura RAG (Retrieval Augmented Generation), diseñado para facilitar el acceso a información oficial relacionada con la gestión del riesgo de desastres en la comuna de Valdivia.
 

@@ -261,4 +261,6 @@ service-account.json
 *.cer
 *.pfx
 
+
 notebooks/data/vector_store/
+.streamlit/
