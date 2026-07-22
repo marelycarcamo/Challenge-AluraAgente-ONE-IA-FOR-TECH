@@ -16,21 +16,13 @@
 	- [3. Qué aporta ALESSIA?](#3-qué-aporta-alessia)
 	- [4. ¿Cuál es el proyecto detrás de ALESSIA?](#4-cuál-es-el-proyecto-detrás-de-alessia)
 	- [5. Ciclo de interacción con ALESSIA](#5-ciclo-de-interacción-con-alessia)
-	- [](#)
 	- [6. ALESSIA en acción](#6-alessia-en-acción)
 	- [7. Arquitectura del sistema](#7-arquitectura-del-sistema)
-		- [Capas de Arquitectura](#capas-de-arquitectura)
 	- [8. Flujo del pipeline RAG](#8-flujo-del-pipeline-rag)
 	- [9. Estructura del proyecto](#9-estructura-del-proyecto)
 	- [10. Tecnologías utilizadas](#10-tecnologías-utilizadas)
 	- [11. Características implementadas (Versión 1.0)](#11-características-implementadas-versión-10)
-		- [Funcionalidades existentes](#funcionalidades-existentes)
 	- [12. Instalación y ejecución](#12-instalación-y-ejecución)
-		- [1. Clonar el repositorio](#1-clonar-el-repositorio)
-		- [2. Crear y activar el entorno virtual](#2-crear-y-activar-el-entorno-virtual)
-		- [3. Instalar dependencias](#3-instalar-dependencias)
-		- [4. Configurar la API KEY](#4-configurar-la-api-key)
-		- [5. Ejecutar ALESSIA](#5-ejecutar-alessia)
 	- [13. Roadmap](#13-roadmap)
 	- [14. Author \& Licence](#14-author--licence)
 
@@ -112,12 +104,12 @@ Su diseño modular permite incorporar futuras funcionalidades sin modificar la a
 
 ## 5. Ciclo de interacción con ALESSIA
 
-![ciclo de funcionamiento](docs\README\diagrams\diagrams_ciclo_conversacional.png)
+![ciclo de funcionamiento](docs/README/diagrams/diagrams_ciclo_conversacional.png)
 ---
 
 ## 6. ALESSIA en acción
 
-![Captura 1: Saludos inicial](docs\README\screenshots\screeshot_saludo_inicial.png)
+docs/README/screenshots/screeshot_saludo_inicial.png
 
 
 Captura 2: Pregunta y respuesta.
@@ -131,13 +123,13 @@ Pendiente screenshot de conversación
 
 ### Capas de Arquitectura
 
-![Capas de Arquitectura](docs\README\diagrams\diagrama_capas_de_arquitectura.png)
+![Capas de Arquitectura](docs/README/diagrams/diagrama_capas_de_arquitectura.png)
 
 
 ---
 ## 8. Flujo del pipeline RAG
 
-![Flujo de Procesamiento RAG](docs\README\diagrams\diagrama_flujo_de_procesamiento_RAG.png)
+![Flujo de Procesamiento RAG](docs/README/diagrams/diagrama_flujo_de_procesamiento_RAG.png)
 
 
 ---
@@ -145,7 +137,7 @@ Pendiente screenshot de conversación
 ## 9. Estructura del proyecto
 
 La estructura del proyecto sigue una separación de responsabilidades que permite mantener el código modular, facilitar las pruebas y favorecer la evolución futura de ALESSIA.
-
+```
 ALESSIA/
 ├── app/
 │   ├── assets/
@@ -229,7 +221,7 @@ ALESSIA/
 ├── pytest.ini
 ├── README.md
 └── requirements.txt
-
+```
 ---
 ## 10. Tecnologías utilizadas
 
@@ -254,7 +246,7 @@ ALESSIA/
 ### Funcionalidades existentes
 ALESSIA cuenta actualmente con una versión 1.0 funcional que implementa un pipeline RAG completo para responder consultas utilizando información proveniente de documentos institucionales oficiales.
 
-![Diagrama de Funcionalidades Implementadass 1.0](docs\README\diagrams\diagrama_funciones_implementadas.png)
+![Diagrama de Funcionalidades Implementadass 1.0](docs/README/diagrams/diagrama_funciones_implementadas.png)
 
 ---
 
@@ -306,7 +298,7 @@ streamlit run app/streamlit_app.py
 
 ALESSIA está diseñada para evolucionar progresivamente desde un asistente documental basado en RAG hacia una plataforma inteligente de apoyo a la gestión del riesgo de desastres.
 
-![Roadmap](docs\README\diagrams\diagrama_roadmap.png)
+![Roadmap](docs/README/diagrams/diagrama_roadmap.png)
 
 ---
 
