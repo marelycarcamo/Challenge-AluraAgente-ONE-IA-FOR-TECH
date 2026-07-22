@@ -76,7 +76,10 @@ def _generate_openrouter(prompt: str) -> str:
     """
     Envía un prompt a OpenRouter utilizando el SDK oficial.
     """
-
+    print(
+        "API Key disponible en llm_client:",
+        bool(OPENROUTER_API_KEY)
+    )
     if not OPENROUTER_API_KEY:
         raise ValueError(
             "No se encontró la API Key de OpenRouter."

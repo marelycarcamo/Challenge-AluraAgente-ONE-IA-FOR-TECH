@@ -32,11 +32,13 @@ from dotenv import load_dotenv
 
 project_root = Path(__file__).resolve().parent.parent
 
+# load_dotenv(
+#     project_root / ".env"
+# )
+
 load_dotenv(
-    project_root / ".env"
+    project_root / ".streamlit" / "secrets.toml"
 )
-
-
 # --------------------------------------------------------------
 # Función auxiliar de configuración
 # --------------------------------------------------------------
@@ -106,4 +108,17 @@ LLM_TEMPERATURE = float(
         "LLM_TEMPERATURE",
         "0.2",
     )
+)
+
+
+
+
+print(
+    "OPENROUTER_API_KEY en entorno:",
+    bool(os.getenv("OPENROUTER_API_KEY"))
+)
+
+print(
+    "OPENROUTER_API_KEY en secrets:",
+    "OPENROUTER_API_KEY" in st.secrets
 )
