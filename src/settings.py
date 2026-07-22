@@ -22,6 +22,7 @@ ALESSIA
 from pathlib import Path
 import os
 
+import streamlit as st
 from dotenv import load_dotenv
 
 
@@ -31,7 +32,55 @@ from dotenv import load_dotenv
 
 project_root = Path(__file__).resolve().parent.parent
 
-load_dotenv(project_root / ".env")
+load_dotenv(
+    project_root / ".env"
+)
+
+
+# --------------------------------------------------------------
+# Función auxiliar de configuración
+# --------------------------------------------------------------
+
+def _get_setting(
+    key: str,
+    default: str | None = None,
+) -> str | None:
+    """
+    Obtiene una configuración desde el entorno disponible.
+
+    Prioridad:
+    1. Variables de entorno, utilizadas durante el desarrollo local.
+    2. Secrets de Streamlit Cloud, utilizados en el despliegue.
+
+    Parameters
+    ----------
+    key : str
+        Nombre de la configuración.
+
+    default : str | None
+        Valor utilizado si la configuración no existe.
+
+    Returns
+    -------
+    str | None
+        Valor de la configuración.
+    """
+
+    value = os.getenv(
+        key
+    )
+
+    if value:
+        return value
+
+    try:
+        return st.secrets.get(
+            key,
+            default,
+        )
+
+    except Exception:
+        return default
 
 
 # --------------------------------------------------------------
@@ -40,13 +89,21 @@ load_dotenv(project_root / ".env")
 
 DEFAULT_PROVIDER = "openrouter"
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-OPENROUTER_MODEL = os.getenv(
+OPENROUTER_API_KEY = _get_setting(
+    "OPENROUTER_API_KEY"
+)
+
+
+OPENROUTER_MODEL = _get_setting(
     "OPENROUTER_MODEL",
     "openrouter/auto",
 )
 
+
 LLM_TEMPERATURE = float(
-    os.getenv("LLM_TEMPERATURE", "0.2")
+    _get_setting(
+        "LLM_TEMPERATURE",
+        "0.2",
+    )
 )
