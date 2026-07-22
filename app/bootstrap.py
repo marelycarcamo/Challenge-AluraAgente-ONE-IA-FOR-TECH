@@ -20,24 +20,39 @@ Proyecto:
     Asistente basado en RAG para la gestión del riesgo de desastres.
 """
 
+
 import streamlit as st
+
+# from src.services.agent_service import AgentService
+
+
+# @st.cache_resource
+# def load_agent_service() -> AgentService:
+#     """
+#     Inicializa y reutiliza el servicio principal del agente.
+
+#     El servicio se almacena como recurso de Streamlit para evitar
+#     recrear innecesariamente los modelos de embeddings, reranking
+#     y la conexión persistente con ChromaDB en cada rerun de la aplicación.
+
+#     Returns
+#     -------
+#     AgentService
+#         Servicio configurado para ejecutar consultas RAG.
+#     """
+
+#     return AgentService.create()
+
+
+#########################################
+
 
 from src.services.agent_service import AgentService
 
 
-@st.cache_resource
 def load_agent_service() -> AgentService:
     """
-    Inicializa y reutiliza el servicio principal del agente.
-
-    El servicio se almacena como recurso de Streamlit para evitar
-    recrear innecesariamente los modelos de embeddings, reranking
-    y la conexión persistente con ChromaDB en cada rerun de la aplicación.
-
-    Returns
-    -------
-    AgentService
-        Servicio configurado para ejecutar consultas RAG.
+    Inicializa el servicio principal del agente.
     """
 
     return AgentService.create()
