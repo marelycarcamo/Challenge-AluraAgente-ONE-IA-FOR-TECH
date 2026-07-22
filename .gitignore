@@ -263,4 +263,4 @@ service-account.json
 
 
 notebooks/data/vector_store/*.*
-.streamlit/*.toml
+.streamlit/secrets.toml
