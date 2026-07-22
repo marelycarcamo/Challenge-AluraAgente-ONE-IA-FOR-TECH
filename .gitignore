@@ -262,5 +262,5 @@ service-account.json
 *.pfx
 
 
-notebooks/data/vector_store/
-.streamlit/
+notebooks/data/vector_store/*.*
+/.streamlit/*.toml
