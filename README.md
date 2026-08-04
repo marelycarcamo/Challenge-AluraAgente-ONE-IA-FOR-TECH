@@ -1,11 +1,5 @@
-![Logo ALESSIA](https://raw.githubusercontent.com/marelycarcamo/Challenge-AluraAgente-ONE-IA-FOR-TECH/main/app/assets/logo/alessia_logo.png)
 
-<p align="center">
-  <a href="https://alessia.streamlit.app/">
-    <img src="https://img.shields.io/badge/🚀_PROBAR_ALESSIA-Streamlit-red?style=for-the-badge&logo=streamlit" alt="Probar ALESSIA">
-  </a>
-</p>
-
+![ALESSIA](https://raw.githubusercontent.com/marelycarcamo/Challenge-AluraAgente-ONE-IA-FOR-TECH/fa5bcde7d6d9b214459f2a04a5aac1c49a3159ba/app/assets/images/alessia_img_2.png)
 ---
 
 # Tabla de Indice
@@ -17,12 +11,20 @@
 	- [4. ¿Cuál es el proyecto detrás de ALESSIA?](#4-cuál-es-el-proyecto-detrás-de-alessia)
 	- [5. Ciclo de interacción con ALESSIA](#5-ciclo-de-interacción-con-alessia)
 	- [6. ALESSIA en acción](#6-alessia-en-acción)
+		- [Captura 1: Saludo inicial.](#captura-1-saludo-inicial)
 	- [7. Arquitectura del sistema](#7-arquitectura-del-sistema)
+		- [Capas de Arquitectura](#capas-de-arquitectura)
 	- [8. Flujo del pipeline RAG](#8-flujo-del-pipeline-rag)
 	- [9. Estructura del proyecto](#9-estructura-del-proyecto)
 	- [10. Tecnologías utilizadas](#10-tecnologías-utilizadas)
 	- [11. Características implementadas (Versión 1.0)](#11-características-implementadas-versión-10)
+		- [Funcionalidades existentes](#funcionalidades-existentes)
 	- [12. Instalación y ejecución](#12-instalación-y-ejecución)
+		- [1. Clonar el repositorio](#1-clonar-el-repositorio)
+		- [2. Crear y activar el entorno virtual](#2-crear-y-activar-el-entorno-virtual)
+		- [3. Instalar dependencias](#3-instalar-dependencias)
+		- [4. Configurar la API KEY](#4-configurar-la-api-key)
+		- [5. Ejecutar ALESSIA](#5-ejecutar-alessia)
 	- [13. Roadmap](#13-roadmap)
 	- [14. Author \& Licence](#14-author--licence)
 
@@ -30,12 +32,21 @@
 
 ---
 
-![ALESSIA](https://raw.githubusercontent.com/marelycarcamo/Challenge-AluraAgente-ONE-IA-FOR-TECH/fa5bcde7d6d9b214459f2a04a5aac1c49a3159ba/app/assets/images/alessia_img_2.png)
-
+<p align="center">
+	<a href="https://alessia.streamlit.app/">
+    <img src="https://img.shields.io/badge/🚀_PROBAR_ALESSIA-Streamlit-red?style=for-the-badge&logo=streamlit" alt="Probar ALESSIA">
+  </a>
+</p>
 
 ---
 
 ## 1. ¿PorquÉ nace ALESSIA?
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=UZ_mJdIBY8s" target="_blank">
+    <img src="https://img.youtube.com/vi/UZ_mJdIBY8s/0.jpg" alt="Ver video del proyecto" width="560" height="315">
+  </a>
+</p>
 
 La gestión del riesgo de desastres requiere acceso oportuno a información confiable para apoyar la preparación, prevención y respuesta ante distintos escenarios de emergencia.
 
@@ -105,15 +116,16 @@ Su diseño modular permite incorporar futuras funcionalidades sin modificar la a
 ## 5. Ciclo de interacción con ALESSIA
 
 ![ciclo de funcionamiento](docs/README/diagrams/diagrams_ciclo_conversacional.png)
+
 ---
 
 ## 6. ALESSIA en acción
 
-docs/README/screenshots/screeshot_saludo_inicial.png
 
+### Captura 1: Saludo inicial.
 
-Captura 2: Pregunta y respuesta.
-Pendiente screenshot de conversación
+![Screensot saludo inicial](docs/README/screenshots/screeshot_saludo_inicial.png)
+
 
 ---
 ## 7. Arquitectura del sistema
@@ -170,7 +182,6 @@ ALESSIA/
 │   └── README/
 │       ├── diagrams/
 │       ├── infographics/
-│       ├── logo/
 │       └── screenshots/
 │          
 ├── notebooks/
@@ -225,7 +236,7 @@ ALESSIA/
 ---
 ## 10. Tecnologías utilizadas
 
-[![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://www.python.org/)[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)[![Sentence Transformers](https://img.shields.io/badge/Sentence_Transformers-Embeddings-orange)](https://www.sbert.net/)[![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector_Database-purple)](https://www.trychroma.com/)[![OpenRouter](https://img.shields.io/badge/OpenRouter-LLM_API-black)](https://openrouter.ai/)[![Pytest](https://img.shields.io/badge/Pytest-Testing-green?logo=pytest)](https://docs.pytest.org/)
+[![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://www.python.org/)[![Streamlit](https://img.shields.io/badge/Streamlit-1.57.0-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)[![Sentence Transformers](https://img.shields.io/badge/Sentence_Transformers-5.6.0-yellow?logo=sentence_transformers)](https://www.sbert.net/)[![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector_Database-purple?logo=chromadb)](https://www.trychroma.com/)[![OpenRouter](https://img.shields.io/badge/OpenRouter-LLM_API-black?logo=openrouter)](https://openrouter.ai/)[![Pytest](https://img.shields.io/badge/Pytest-9.1.1-green?logo=pytest)](https://docs.pytest.org/)
 
 
 
@@ -242,6 +253,10 @@ ALESSIA/
 
 ---
 ## 11. Características implementadas (Versión 1.0)
+
+![Infografía Gestión de Desastres](docs\README\infograph\IA_para_Gestión_de_Desastres.png)
+
+---
 
 ### Funcionalidades existentes
 ALESSIA cuenta actualmente con una versión 1.0 funcional que implementa un pipeline RAG completo para responder consultas utilizando información proveniente de documentos institucionales oficiales.
@@ -263,8 +278,8 @@ cd Challenge-AluraAgente-ONE-IA-FOR-TECH
 En Windows:
 
 ```bash
-python -m venv .venv
-.venv\Scripts\activate
+py -m venv .venv
+source .venv\Scripts\activate
 ```
 
 En MacOS/Linux:
@@ -306,3 +321,6 @@ ALESSIA está diseñada para evolucionar progresivamente desde un asistente docu
 ## 14. Author & Licence
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Marely_Cárcamo-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/marely/)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
+![Logo ALESSIA](https://raw.githubusercontent.com/marelycarcamo/Challenge-AluraAgente-ONE-IA-FOR-TECH/main/app/assets/logo/alessia_logo.png)

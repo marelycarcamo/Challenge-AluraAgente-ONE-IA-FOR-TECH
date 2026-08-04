@@ -262,3 +262,5 @@ service-account.json
 *.pfx
 
 notebooks/data/vector_store/
+.streamlit/secrets.toml
+.env
