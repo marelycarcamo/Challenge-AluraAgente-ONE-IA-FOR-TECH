@@ -6,7 +6,7 @@
 
 - [Tabla de Indice](#tabla-de-indice)
 	- [1. ¿PorquÉ nace ALESSIA?](#1-porqué-nace-alessia)
-	- [2. ¿Qué es ALESSIA?](#2-qué-es-alessia)
+	- [¿Qué es ALESSIA?](#qué-es-alessia)
 	- [3. Qué aporta ALESSIA?](#3-qué-aporta-alessia)
 	- [4. ¿Cuál es el proyecto detrás de ALESSIA?](#4-cuál-es-el-proyecto-detrás-de-alessia)
 	- [5. Ciclo de interacción con ALESSIA](#5-ciclo-de-interacción-con-alessia)
@@ -68,9 +68,9 @@ Ante una situación de necesidad, encontrar una respuesta específica puede requ
 
 ---
 
-## 2. ¿Qué es ALESSIA?
+## ¿Qué es ALESSIA?
 
-**ALESSIA** (Asistente Local de Enlace, Soluciones e Inteligencia Autónoma) es un asistente basado en Inteligencia Artificial Generativa y arquitectura RAG (Retrieval Augmented Generation), diseñado para facilitar el acceso a información oficial relacionada con la gestión del riesgo de desastres en la comuna de Valdivia.
+**ALESSIA**: **Asistente Local de Enlace, Soluciones, Soporte e Inteligencia Autónoma**, es un asistente basado en Inteligencia Artificial Generativa y arquitectura RAG (Retrieval Augmented Generation), diseñado para facilitar el acceso a información oficial relacionada con la gestión del riesgo de desastres en la comuna de Valdivia.
 
 A través de una interfaz conversacional, ALESSIA permite realizar consultas utilizando lenguaje natural y genera respuestas fundamentadas en documentación institucional previamente procesada, reduciendo la necesidad de revisar manualmente múltiples fuentes.
 
@@ -149,14 +149,22 @@ Su diseño modular permite incorporar futuras funcionalidades sin modificar la a
 ## 9. Estructura del proyecto
 
 La estructura del proyecto sigue una separación de responsabilidades que permite mantener el código modular, facilitar las pruebas y favorecer la evolución futura de ALESSIA.
+
 ```
-ALESSIA/
+Challenge_Alura_Agent/
+├── .streamlit/
 ├── app/
 │   ├── assets/
 │   │   ├── avatars/
+│   │   │   ├── alessia_avatar.png
+│   │   │   └── user_avatar.png
 │   │   ├── images/
+│   │   │   ├── alessia_img_1.png
+│   │   │   ├── alessia_img_2.png
+│   │   │   └── alessia_img_3.png
 │   │   └── logo/
-│   │       
+│   │       ├── alessia_logo_2.png
+│   │       └── alessia_logo.png
 │   ├── components/
 │   │   └── chat.py
 │   ├── bootstrap.py
@@ -172,19 +180,32 @@ ALESSIA/
 │   │   └── test/
 │   │       └── test_plan_comunal.pdf
 │   └── vector_store/
-│       ├── 059c90cb-9bcf-4cc3-815b-206ba132aef2/
+│       ├── f0875f3a-d239-4f67-88c2-75417ba9f54d/
 │       │   ├── data_level0.bin
 │       │   ├── header.bin
 │       │   ├── length.bin
 │       │   └── link_lists.bin
 │       └── chroma.sqlite3
 ├── docs/
-│   └── README/
-│       ├── diagrams/
-│       ├── infographics/
-│       └── screenshots/
-│          
+│   ├── README/
+│   │   ├── diagrams/
+│   │   │   ├── diagrama_capas_de_arquitectura.png
+│   │   │   ├── diagrama_flujo_de_procesamiento_RAG.png
+│   │   │   ├── diagrama_funciones_implementadas.png
+│   │   │   ├── diagrama_roadmap.png
+│   │   │   └── diagrams_ciclo_conversacional.png
+│   │   ├── infograph/
+│   │   │   └── IA_para_Gestión_de_Desastres.png
+│   │   └── screenshots/
+│   │       └── screeshot_saludo_inicial.png
+│   ├── 01. La historia de ALESSIA.md
+│   ├── 02. La arquitectura.md
+│   ├── 03. Decisiones de diseño.md
+│   ├── 04. Estrategia de pruebas.md
+│   ├── 05. Despliegue.md
+│   └── 06. Roadmap.md
 ├── notebooks/
+│   ├── data/
 │   ├── 01_data_ingestion.ipynb
 │   ├── 02_embeddings_vector_store.ipynb
 │   ├── 03_retrieval.ipynb
@@ -232,6 +253,7 @@ ALESSIA/
 ├── pytest.ini
 ├── README.md
 └── requirements.txt
+
 ```
 ---
 ## 10. Tecnologías utilizadas
