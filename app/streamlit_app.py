@@ -44,8 +44,6 @@ from app.config import (
     APP_DESCRIPTION,
     APP_ICON,
     APP_NAME,
-    # ALESSIA_AVATAR_PATH,
-    # USER_AVATAR_PATH,
     LOGO_PATH,
     AVATAR_PATH
 )
@@ -70,13 +68,13 @@ with st.sidebar:
     if LOGO_PATH.exists():
         st.image(
             str(LOGO_PATH),
-            use_container_width=True,
+            width="stretch",
         )
     
     if AVATAR_PATH.exists():
         st.image(
             str(AVATAR_PATH),
-            use_container_width=True,
+            width="stretch",
         )   
         st.markdown(APP_DESCRIPTION)
 # --------------------------------------------------
